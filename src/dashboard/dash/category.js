@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LeftAside from "./leftaside";
-import RecentOrder from "./recentorder";
 import Header from "./header";
-import OrderForm from "./orderform";
+import Items from "./items";
 
-const NewOrder = () => {
+const Category = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const [count, setCount] = useState(0);
   const [icon, setIcon] = useState(false);
   const [style, setStyle] = useState({
     display: "grid",
-    gridTemplateColumns: "14rem auto",
+    gridTemplateColumns: "14rem auto", // Default for larger screens
   });
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   useEffect(() => {
     const mediaQuery1200 = window.matchMedia("(max-width: 1200px)");
@@ -56,17 +58,17 @@ const NewOrder = () => {
           setSidebarVisible={setSidebarVisible}
         />
         <main>
-          <div className="orderheader">
+          <div className="profilepage">
             <div className="search-bar-container">
               <i className="fa fa-search search-icon"></i>
               <input
                 type="text"
                 className="search-bar"
-                placeholder="Search by Title or Catergory"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+                placeholder="Search by category..."
+                value={searchTerm}
+                onChange={handleSearchChange}
               />
-            </div>
+            </div>{" "}
             {icon && (
               <div
                 className={`search-container ${icon ? "block" : "hidden"}`}
@@ -78,22 +80,18 @@ const NewOrder = () => {
                 <input
                   type="text"
                   className="search-bar"
-                  placeholder="Search by Title or Catergory"
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by category..."
+                  onChange={handleSearchChange}
                 />
               </div>
             )}
             <Header setIcon={setIcon} setSidebarVisible={setSidebarVisible} />
           </div>
-          <OrderForm
-            count={count}
-            setCount={setCount}
-            searchQuery={searchQuery}
-          />
+          <Items searchTerm={searchTerm} /> {/* Passing searchTerm to Items */}
         </main>
       </div>
     </div>
   );
 };
 
-export default NewOrder;
+export default Category;

@@ -7,7 +7,7 @@ import RecentOrder from "./recentorder";
 const Responsive = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-
+  const [icon, setIcon] = useState(false);
   return (
     <div className="body">
       <div className="container ">
@@ -17,16 +17,47 @@ const Responsive = () => {
         />
 
         <main>
-          <h1>DashBoard</h1>
+          {" "}
           <div className="date">
             <input type="date" />
-          </div>
 
-          <RecentOrder />
+            <RecentOrder />
+          </div>
         </main>
         {/* right star */}
         <div className="right">
-          <Header cartCount={cartCount} setSidebarVisible={setSidebarVisible} />
+          <div className="dashheader">
+            <div className="search-bar-container">
+              <i className="fa fa-search search-icon"></i>
+              <input
+                type="text"
+                className="search-bar"
+                placeholder="Search..."
+              />
+            </div>
+
+            {icon && (
+              <div
+                className={`search-container ${icon ? "block" : "hidden"}`}
+                style={{
+                  display: icon ? "" : "none",
+                }}
+              >
+                <i className="fa fa-search search-icon"></i>
+                <input
+                  type="text"
+                  className="search-bar"
+                  placeholder="Search..."
+                />
+              </div>
+            )}
+            <Header
+              cartCount={cartCount}
+              setIcon={setIcon}
+              setSidebarVisible={setSidebarVisible}
+            />
+          </div>
+
           <RecentUpdates />
           <SalesAnalytics />
           <div className="item add_products">

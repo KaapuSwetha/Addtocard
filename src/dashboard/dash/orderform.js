@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useCount } from "../context/contextprovider";
 
-const OrderForm = ({ count, setCount }) => {
+const OrderForm = ({ searchQuery, count, setCount }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [displayForm, setDisplayForm] = useState(false);
   const [isCategoryDropdown, setIsCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const { addtocart, setAddtocart } = useCount(); // Using context for count and setCount
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleHeartClick = () => {
+    setIsLiked(!isLiked); // Toggle heart state on click
+  };
+
   const [selectedProduct, setSelectedProduct] = useState({
     price: "",
     category: "",
@@ -16,6 +24,11 @@ const OrderForm = ({ count, setCount }) => {
 
   const handleIncrement = () => {
     setCount(count + 1);
+  };
+
+  const handleaddtocart = () => {
+    setAddtocart(addtocart + 1);
+    setDisplayForm(false);
   };
 
   useEffect(() => {
@@ -44,9 +57,11 @@ const OrderForm = ({ count, setCount }) => {
       category: product.category,
       rating: product.rating?.rate,
       avaliable: product.rating?.count,
+      image: product.image,
     });
     setDisplayForm(true);
     setIsCategoryDropdown(false);
+    setCount(0);
   };
 
   const handleCategorySelect = (category) => {
@@ -74,24 +89,57 @@ const OrderForm = ({ count, setCount }) => {
     });
   };
 
+  // Filter products and categories based on search query
+  const filteredProducts = products.filter((product) => {
+    const search = searchQuery.toLowerCase();
+    return (
+      product.title.toLowerCase().includes(search) ||
+      product.category.toLowerCase().includes(search)
+    );
+  });
+
+  const filteredCategories = categories.filter((category) =>
+    category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return <p>Loading products...</p>;
   }
 
   return (
     <div className="ordernew">
+      <div className="items">
+        {[
+          ...new Map(
+            products.map((product) => [product.category, product])
+          ).values(),
+        ].map((product, index) => (
+          <div key={index} className="item">
+            <img
+              className="orderimage"
+              src={product.image}
+              alt={product.title}
+              onClick={() => setSelectedCategory(product.category)} // Click on image to filter by category
+            />
+            <p>{product.category}</p>
+          </div>
+        ))}
+      </div>
+
       <div style={{ display: "grid", justifyContent: "end" }}>
         <button className="addorder" onClick={handleBuyClick}>
           Buy
         </button>
       </div>
-
-      {/* Modal */}
+      <br />
       {displayForm && (
         <div
-          className="modal show"
+          className="modal show modalview"
           tabIndex="-1"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{
+            display: "block",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
         >
           <div className="modal-dialog">
             <div className="modal-content">
@@ -103,7 +151,7 @@ const OrderForm = ({ count, setCount }) => {
                   onClick={() => setDisplayForm(false)}
                 ></button>
               </div>
-              <div className="modal-body">
+              <div className="formcard" style={{ marginTop: "-10px" }}>
                 <form>
                   {isCategoryDropdown ? (
                     <div className="mb-3">
@@ -117,7 +165,7 @@ const OrderForm = ({ count, setCount }) => {
                         onChange={(e) => handleCategorySelect(e.target.value)}
                       >
                         <option value="">-- Select a category --</option>
-                        {categories.map((category) => (
+                        {filteredCategories.map((category) => (
                           <option key={category} value={category}>
                             {category}
                           </option>
@@ -140,41 +188,52 @@ const OrderForm = ({ count, setCount }) => {
                   )}
                   {selectedProduct.category && (
                     <>
-                      <div className="mb-3">
-                        <label htmlFor="price" className="form-label">
-                          Price
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="price"
-                          value={selectedProduct.price}
-                          readOnly
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="rating" className="form-label">
-                          Rating
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="rating"
-                          value={selectedProduct.rating}
-                          readOnly
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="avaliable" className="form-label">
-                          In Stock
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="avaliable"
-                          value={selectedProduct.avaliable}
-                          readOnly
-                        />
+                      {selectedProduct.image && (
+                        <div className="mb-3">
+                          <img
+                            src={selectedProduct.image}
+                            alt="Selected Product"
+                            className=" formimg"
+                          />
+                        </div>
+                      )}
+                      <div className="price">
+                        <div className="mb-3">
+                          <label htmlFor="price" className="form-label">
+                            Price
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="price"
+                            value={selectedProduct.price}
+                            readOnly
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="rating" className="form-label">
+                            Rating
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="rating"
+                            value={selectedProduct.rating}
+                            readOnly
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="avaliable" className="form-label">
+                            In Stock
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="avaliable"
+                            value={selectedProduct.avaliable}
+                            readOnly
+                          />
+                        </div>
                       </div>
                     </>
                   )}
@@ -182,7 +241,9 @@ const OrderForm = ({ count, setCount }) => {
                     <div className="plus" onClick={handleIncrement}>
                       +
                     </div>
-                    <div className="add">Add to cart</div>
+                    <div className="add" onClick={handleaddtocart}>
+                      {count <= 0 ? "Add to Cart" : count}
+                    </div>
                     <div
                       className="minus"
                       onClick={() => setCount(count > 0 ? count - 1 : 0)}
@@ -200,33 +261,40 @@ const OrderForm = ({ count, setCount }) => {
           </div>
         </div>
       )}
-
-      {/* Product Table */}
-      <div className="recent_order">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Rating</th>
-              <th>Add to cart</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.title}</td>
-                <td className="warning">${product.price.toFixed(2)}</td>
-                <td className="success">{product.category}</td>
-                <td>{product.rating?.rate}</td>
-                <td onClick={() => handleProductSelect(product)}>+</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="product-container">
+        {filteredProducts.map((product) => (
+          <div key={product.id} className="product-cards">
+            <i
+              className={`fa ${isLiked ? "fa-heart" : "fa-heart-o"} heart-icon`}
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+              onClick={handleHeartClick}
+            ></i>
+            <img
+              src={product.image}
+              alt={product.title}
+              className="product-image"
+            />
+            <h5>{product.title}</h5>
+            <p className="price">${product.price.toFixed(2)}</p>
+            <p className="category">{product.category}</p>
+            <p className="rating">
+              {" "}
+              <i className="fa fa-star"></i>Rating:{" "}
+              {product.rating?.rate || "N/A"}
+            </p>
+            <button
+              className="add-to-cart-btn"
+              onClick={() => handleProductSelect(product)}
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

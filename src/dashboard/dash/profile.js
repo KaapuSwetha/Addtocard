@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LeftAside from "./leftaside";
-import RecentOrder from "./recentorder";
 import Header from "./header";
-import OrderForm from "./orderform";
+import ProfilePage from "./profilepage";
 
-const NewOrder = () => {
+const Profile = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const [count, setCount] = useState(0);
   const [icon, setIcon] = useState(false);
   const [style, setStyle] = useState({
     display: "grid",
     gridTemplateColumns: "14rem auto",
   });
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
     const mediaQuery1200 = window.matchMedia("(max-width: 1200px)");
@@ -25,23 +22,24 @@ const NewOrder = () => {
           gridTemplateColumns: "7rem 100rem",
         });
       } else if (mediaQuery1200.matches) {
+        // Styles for screens <= 1200px and > 768px
         setStyle({
           display: "grid",
           gridTemplateColumns: "7rem auto",
         });
       } else {
+        // Styles for screens > 1200px
         setStyle({
           display: "grid",
           gridTemplateColumns: "14rem auto",
         });
       }
     };
-
     handleMediaChange();
-
     mediaQuery1200.addEventListener("change", handleMediaChange);
     mediaQuery768.addEventListener("change", handleMediaChange);
 
+    // Cleanup listeners on unmount
     return () => {
       mediaQuery1200.removeEventListener("change", handleMediaChange);
       mediaQuery768.removeEventListener("change", handleMediaChange);
@@ -56,17 +54,16 @@ const NewOrder = () => {
           setSidebarVisible={setSidebarVisible}
         />
         <main>
-          <div className="orderheader">
+          <div className="profilepage">
+            {" "}
             <div className="search-bar-container">
               <i className="fa fa-search search-icon"></i>
               <input
                 type="text"
                 className="search-bar"
-                placeholder="Search by Title or Catergory"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+                placeholder="Search..."
               />
-            </div>
+            </div>{" "}
             {icon && (
               <div
                 className={`search-container ${icon ? "block" : "hidden"}`}
@@ -78,22 +75,17 @@ const NewOrder = () => {
                 <input
                   type="text"
                   className="search-bar"
-                  placeholder="Search by Title or Catergory"
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
                 />
               </div>
             )}
             <Header setIcon={setIcon} setSidebarVisible={setSidebarVisible} />
           </div>
-          <OrderForm
-            count={count}
-            setCount={setCount}
-            searchQuery={searchQuery}
-          />
+          <ProfilePage />
         </main>
       </div>
     </div>
   );
 };
 
-export default NewOrder;
+export default Profile;

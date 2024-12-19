@@ -1,7 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 const LeftAside = ({ setSidebarVisible, isSidebarVisible }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // To get the current pathname
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
     <aside style={isSidebarVisible ? { display: "block" } : undefined}>
       <div className="top">
@@ -16,7 +23,7 @@ const LeftAside = ({ setSidebarVisible, isSidebarVisible }) => {
           onClick={() => setSidebarVisible(false)}
         >
           <span>
-            <i class="fa fa-times"></i>
+            <i className="fa fa-times"></i>
           </span>
         </div>
       </div>
@@ -26,37 +33,61 @@ const LeftAside = ({ setSidebarVisible, isSidebarVisible }) => {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            navigate("/");
+            handleNavigation("/"); // Navigate to Dashboard
           }}
+          className={location.pathname === "/" ? "active" : ""}
         >
           <span>
-            <i class="fa fa-home"></i>
+            <i className="fa fa-home"></i>
           </span>
           <h3>Dashboard</h3>
         </a>
-        <a href="#">
-          {" "}
-          <span>
-            <i class="fa fa-user" style={{ fontSize: "24px" }}></i>
-          </span>
-          <h3>User Details</h3>
-        </a>{" "}
+
         <a
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            navigate("/new-order");
+            handleNavigation("/profile"); // Navigate to Profile
           }}
+          className={location.pathname === "/profile" ? "active" : ""}
         >
           <span>
-            <i class="fa fa-shopping-bag" style={{ fontSize: "24px" }}></i>
+            <i className="fa fa-user"></i>
           </span>
-          <h3>Orders</h3>
+          <h3>Profile</h3>
         </a>
-        <a href="#">
-          {" "}
+
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigation("/new-order"); // Navigate to New Order
+          }}
+          className={location.pathname === "/new-order" ? "active" : ""}
+        >
           <span>
-            <i class="fa fa-arrow-left"></i>
+            <i className="fa fa-th-large"></i>
+          </span>
+          <h3>Categories</h3>
+        </a>
+
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigation("/category"); // Navigate to Cart
+          }}
+          className={location.pathname === "/category" ? "active" : ""}
+        >
+          <span>
+            <i className="fa fa-shopping-bag"></i>
+          </span>
+          <h3>Cart</h3>
+        </a>
+
+        <a href="#">
+          <span>
+            <i className="fa fa-arrow-left"></i>
           </span>
           <h3>Logout</h3>
         </a>
