@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { useCount } from "../context/contextprovider";
+import Login from "../login";
 
 const Header = ({ setSidebarVisible, setIcon }) => {
   const { addtocart } = useCount();
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); // State for modal visibility
 
   const toggleSearch = () => {
     setIcon(true);
-
     setIsSearchVisible(!isSearchVisible);
   };
+
+  const openModal = () => setIsModalVisible(true);
+  const closeModal = () => setIsModalVisible(false);
 
   return (
     <div className="top">
@@ -46,15 +50,19 @@ const Header = ({ setSidebarVisible, setIcon }) => {
               className="fa fa-search search-icon"
               style={{
                 fontSize: "20px",
-                marginLeft: "35px",
+                marginLeft: "20px",
                 color: "black",
                 marginTop: "2px",
-                cursor: "pointer", // Optional: change cursor to pointer
+                cursor: "pointer",
               }}
-              onClick={toggleSearch} // Toggle visibility when clicked
+              onClick={toggleSearch}
             ></i>
           </div>
-          <i className="fa fa-user user-icon" style={{ fontSize: "24px" }}></i>
+          <i
+            className="fa fa-user user-icon"
+            style={{ fontSize: "24px" }}
+            onClick={openModal} // Open modal on click
+          ></i>
           <i
             className="fa fa-cart-plus cart-icon"
             style={{ fontSize: "24px", marginLeft: "10px" }}
@@ -65,17 +73,7 @@ const Header = ({ setSidebarVisible, setIcon }) => {
           </span>
         </div>
       </div>
-
-      {/* Search container, toggle visibility based on state */}
-      {/* <div
-        className={`search-container ${isSearchVisible ? "block" : "hidden"}`}
-        style={{
-          display: isSearchVisible ? "" : "none",
-        }}
-      >
-        <i className="fa fa-search search-icon"></i>
-        <input type="text" className="search-bar" placeholder="Search..." />
-      </div> */}
+      {isModalVisible && <Login closeModal={closeModal} />}
     </div>
   );
 };

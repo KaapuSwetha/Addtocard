@@ -84,7 +84,19 @@ const LeftAside = ({ setSidebarVisible, isSidebarVisible }) => {
           </span>
           <h3>Cart</h3>
         </a>
-
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigation("/sales"); // Navigate to Dashboard
+          }}
+          className={location.pathname === "/sales" ? "active" : ""}
+        >
+          <span>
+            <i className="fa fa-percent" style={{ fontSize: "20px" }}></i>
+          </span>
+          <h3>Company Sales</h3>
+        </a>
         <a href="#">
           <span>
             <i className="fa fa-arrow-left"></i>

@@ -6,12 +6,14 @@ import Responsive from "./dashboard/dash/Responsive";
 import { CountProvider } from "./dashboard/context/contextprovider";
 import Profile from "./dashboard/dash/profile";
 import Category from "./dashboard/dash/category";
+import MainPage from "./dashboard/dash/mainpage";
 function App() {
   return (
     <CountProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Responsive />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/sales" element={<Responsive />} />
           <Route path="/new-order" element={<NewOrder />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Category />} />

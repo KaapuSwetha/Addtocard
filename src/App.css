@@ -222,7 +222,9 @@ margin-top: 70px;
 .form-container {
   margin-bottom: 20px;
 }
-
+.mb-3 label{
+   color: black
+}
 .form-label {
   font-size: 1.1rem;
   font-weight: 600;
@@ -931,7 +933,8 @@ input:focus {
   background: #fff;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 }
-.sugcard h1{font-size: 1.5rem;padding: 10px;}
+.sugcard h1{font-size: 1.5rem;}
+.sugcard p{margin-left: 1px;}
 .formimg{
   max-width:100%;
   height: 80px;
@@ -942,10 +945,91 @@ input:focus {
 }
 .suggestion-card img {
   max-width: 100px;
-  height: auto;
+  height: 100px;
   margin-bottom: 10px;
 }
 .suggestion {font-size: 1.0rem;}
+.carousel {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  margin-top: 70px;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 300px;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.carousel-button.prev {
+  left: 10px;
+}
+
+.carousel-button.next {
+  right: 10px;
+}
+
+.carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Default to 4 columns */
+  gap: 10px; /* Space between the images */
+  margin-top: 20px;
+  padding: 0 10px;
+}
+
+.image-item {
+  transition: transform 0.3s ease-in-out;
+}
+.image-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.top-offers {
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 16px;
+
+}
+.maincontent p{
+  font-size: 21px;
+  padding: 0 5px;
+}
+.top-offer-item {
+  text-align: center; /* Center the content horizontally */
+}
+
+.top-offer-item img {
+  width: 100px; /* Make image fill its container */
+  height: 100px; /* Maintain aspect ratio */
+  border-radius: 8px; /* Optional: add rounded corners */
+}
+.top-offer-item p
+{font-size: 13px; margin-top: 5px }
+.image-item:hover {
+  transform: scale(1.05);
+}
+.suggestion-card:hover {
+  transform: scale(1.05);
+}
  @media (max-width: 1200px) {
   .container{
     width: 94%;
@@ -984,6 +1068,30 @@ input:focus {
  }
  /* media query for phones */
  @media (max-width: 768px) {
+.ends{
+  width: 500px;
+}
+ .top-offers{
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(4, 1fr);
+  width: 500px;
+ }.top-offer-item img{
+  height: 70px;
+  width: 70px;
+ }
+  .carousel {width: 500px}
+  .carousel-slide img {
+    height: 200px;
+    width: 100%;
+  } .image-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap:30px
+  }
+.image-item img {
+    width: 200px;
+    height: auto;
+
+  }
   .top-30 {
     position: absolute;
     top: 10px;  /* Adjust vertical position */
@@ -1270,7 +1378,7 @@ main .profilepage .menu_bar{
 
 }.suggestion-card img {
   max-width: 50px;
-  height: auto;
+  height: 50px;
   margin-bottom: 10px;
 }.suggestion h5 {
   font-size: 0.9rem;
@@ -1294,10 +1402,34 @@ main .profilepage .menu_bar{
 
 .suggestion .add-to-cart-btn {
   padding: 7px 10px;
-}.sugcard h1{font-size: 1.5rem;padding: 10px;}
-
+}
+.sugcard h1{font-size: 1.2rem;width: 300px;}
+.sugcard p{font-size: 0.7rem}
  }
+
  @media (max-width: 475px) {
+  .top-offers{
+    width: 330px;
+   }.ends{
+    width: 330px;
+  }
+  .maincontent p{font-size: 1.0rem;}
+  .top-offer-item p{
+    font-size: 0.5rem;
+  }
+   .top-offer-item img{
+    height: 50px;
+    width: 50px;
+   }
+  .carousel {width: 330px; }
+  .carousel-slide img {
+    width: 100%;
+
+  }.image-item img {
+    width: 150px;
+  }.image-gallery { gap:15px
+  }
+
  .suggestion {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1396,11 +1528,11 @@ main .addtocard {
 }
 .suggestion-card {
   max-width: 150px;
-  height: 200px;
+  height: 190px;
 
 }.suggestion-card img {
-  max-width: 40px;
-  height: auto;
+  max-width: 50px;
+  height: 50px;
   margin-bottom: 10px;
 }.suggestion h5 {
   font-size: 0.7rem;

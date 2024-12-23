@@ -8,11 +8,15 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
   const [displayForm, setDisplayForm] = useState(false);
   const [isCategoryDropdown, setIsCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { addtocart, setAddtocart } = useCount(); // Using context for count and setCount
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleHeartClick = () => {
-    setIsLiked(!isLiked); // Toggle heart state on click
+  const { addtocart, setAddtocart } = useCount();
+  const [likedProducts, setLikedProducts] = useState([]);
+  const handleHeartClick = (productId) => {
+    setLikedProducts(
+      (prev) =>
+        prev.includes(productId)
+          ? prev.filter((id) => id !== productId) // Remove if already liked
+          : [...prev, productId] // Add if not liked
+    );
   };
 
   const [selectedProduct, setSelectedProduct] = useState({
@@ -60,7 +64,7 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
       image: product.image,
     });
     setDisplayForm(true);
-    setIsCategoryDropdown(false);
+    // setIsCategoryDropdown(false);
     setCount(0);
   };
 
@@ -92,10 +96,14 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
   // Filter products and categories based on search query
   const filteredProducts = products.filter((product) => {
     const search = searchQuery.toLowerCase();
-    return (
+    const matchesSearch =
       product.title.toLowerCase().includes(search) ||
-      product.category.toLowerCase().includes(search)
-    );
+      product.category.toLowerCase().includes(search);
+
+    const matchesCategory =
+      selectedCategory === "" || product.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
   });
 
   const filteredCategories = categories.filter((category) =>
@@ -105,23 +113,22 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
   if (loading) {
     return <p>Loading products...</p>;
   }
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <div className="ordernew">
       <div className="items">
-        {[
-          ...new Map(
-            products.map((product) => [product.category, product])
-          ).values(),
-        ].map((product, index) => (
+        {categories.map((category, index) => (
           <div key={index} className="item">
             <img
               className="orderimage"
-              src={product.image}
-              alt={product.title}
-              onClick={() => setSelectedCategory(product.category)} // Click on image to filter by category
+              src={products.find((p) => p.category === category)?.image}
+              alt={category}
+              onClick={() => handleCategoryClick(category)}
             />
-            <p>{product.category}</p>
+            <p>{category}</p>
           </div>
         ))}
       </div>
@@ -265,14 +272,16 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
         {filteredProducts.map((product) => (
           <div key={product.id} className="product-cards">
             <i
-              className={`fa ${isLiked ? "fa-heart" : "fa-heart-o"} heart-icon`}
+              className={`fa ${
+                likedProducts.includes(product.id) ? "fa-heart" : "fa-heart-o"
+              } heart-icon`}
               style={{
                 display: "flex",
                 justifyContent: "end",
                 fontSize: "20px",
                 cursor: "pointer",
               }}
-              onClick={handleHeartClick}
+              onClick={() => handleHeartClick(product.id)}
             ></i>
             <img
               src={product.image}
@@ -283,8 +292,7 @@ const OrderForm = ({ searchQuery, count, setCount }) => {
             <p className="price">${product.price.toFixed(2)}</p>
             <p className="category">{product.category}</p>
             <p className="rating">
-              {" "}
-              <i className="fa fa-star"></i>Rating:{" "}
+              <i className="fa fa-star"></i> Rating:{" "}
               {product.rating?.rate || "N/A"}
             </p>
             <button

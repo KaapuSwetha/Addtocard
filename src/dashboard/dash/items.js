@@ -51,6 +51,7 @@ const Items = ({ searchTerm }) => {
       <br />
       <div className="sugcard">
         <h1>Suggested for you</h1>
+        <p>Based on Your Activity</p>
         <div className="product-wrapper">
           <div className="suggestion">
             {filteredProducts.map((product) => (
@@ -61,7 +62,29 @@ const Items = ({ searchTerm }) => {
                 <p className="rating">
                   <i className="fa fa-star"></i>
                   Rating: {product.rating?.rate || "N/A"}
-                </p>
+                </p>{" "}
+                <button className="add-to-cart-btn">Add to Cart</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <br />
+      <div className="sugcard">
+        <h1>Recently Viewed</h1>
+        <p>Based on Your Activity</p>
+        <div className="product-wrapper">
+          <div className="suggestion">
+            {filteredProducts.map((product) => (
+              <div className="suggestion-card" key={product.id}>
+                <img src={product.image} alt={product.title} />
+                <p className="price">${product.price.toFixed(2)}</p>
+                <p className="category">{product.category}</p>
+                <p className="rating">
+                  <i className="fa fa-star"></i>
+                  Rating: {product.rating?.rate || "N/A"}
+                </p>{" "}
+                <button className="add-to-cart-btn">Add to Cart</button>
               </div>
             ))}
           </div>

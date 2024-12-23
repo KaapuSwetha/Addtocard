@@ -19,7 +19,7 @@ const Responsive = () => {
         <main>
           {" "}
           <div className="date">
-            <input type="date" />
+            {/* <input type="date" /> */}
 
             <RecentOrder />
           </div>
